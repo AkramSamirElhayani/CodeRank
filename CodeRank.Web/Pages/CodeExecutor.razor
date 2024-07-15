@@ -1,0 +1,85 @@
+﻿@page "/code-executor"
+@using Microsoft.CodeAnalysis.CSharp.Scripting
+@using Microsoft.CodeAnalysis.Scripting
+@using System.IO
+@using System.Text
+
+<h3>CodeRank Executor</h3>
+
+<div>
+    <label for="args">Command-line Arguments (space-separated):</label>
+    <input id="args" @bind="CommandLineArgs" style="width: 100%;" />
+</div>
+
+ 
+  
+<StandaloneCodeEditor @ref="_editor" Id="monaco-editor" ConstructionOptions="EditorConstructionOptions"  />
+
+
+<button @onclick="ExecuteCode">Run Code</button>
+
+<h4>Output:</h4>
+<pre>@Output</pre>
+<style>
+
+    .monaco-editor-container {
+        height: 500px;
+        border: 1px solid gray;
+    }
+
+</style>
+@code {
+    private string Code { get; set; } = @"
+using System;
+using System.Linq;
+
+public class Program
+{
+    public static void Main(string args)
+    {
+        Console.WriteLine(args + ""Recived"");
+    }
+}
+";
+    private string Output { get; set; } = "";
+    private string CommandLineArgs { get; set; } = "Hello CodeRank 123";
+    private StandaloneCodeEditor _editor;
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+    {
+        return new StandaloneEditorConstructionOptions
+            {
+                AutomaticLayout = true,
+                Language = "csharp",
+                Value = Code
+            };
+    }
+   
+    private async Task ExecuteCode()
+    {
+        try
+        {
+            var stringWriter = new StringWriter();
+            Console.SetOut(stringWriter);
+
+            var options = ScriptOptions.Default
+                .AddImports("System", "System.Linq")
+                .AddReferences(typeof(Console).Assembly, typeof(Enumerable).Assembly);
+
+            // Wrap the user's code in a class and call Main
+            string wrappedCode = $"{Code} Program.Main(@\"{CommandLineArgs}\");";
+
+            await CSharpScript.EvaluateAsync(wrappedCode, options);
+
+            Output = stringWriter.ToString();
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
+        }
+        catch (CompilationErrorException ex)
+        {
+            Output = string.Join("\n", ex.Diagnostics);
+        }
+        catch (Exception ex)
+        {
+            Output = ex.Message;
+        }
+    }
+}
