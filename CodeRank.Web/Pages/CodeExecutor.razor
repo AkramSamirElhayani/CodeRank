@@ -6,80 +6,249 @@
 
 <h3>CodeRank Executor</h3>
 
-<div>
-    <label for="args">Command-line Arguments (space-separated):</label>
-    <input id="args" @bind="CommandLineArgs" style="width: 100%;" />
+<div class="code-rank-container">
+    <div class="description-panel">
+        <h3>CodeRank Executor</h3>
+        <p>
+            Welcome to CodeRank! This is a C# code execution playground where you can write and run C# code directly in your browser.
+        </p>
+        <p>
+            The editor on the right is pre-loaded with a basic C# program structure. You can modify the code within the Main method.
+        </p>
+        <p>
+            Enter your input string in the text box, then click "Run Code" to execute your program and see the output below the editor.
+        </p>
+        <p>
+            You can also run predefined test cases to check your code against expected outputs.
+        </p>
+    </div>
+
+    <div class="code-panel">
+     
+
+        <div class="editor-container">
+            <StandaloneCodeEditor @ref="_editor" Id="monaco-editor" ConstructionOptions="EditorConstructionOptions"  />
+        </div>
+
+        <div class="button-container">
+            <button @onclick="RunTestCases" disabled="@IsRunningTests">
+                @if (IsRunningTests)
+                {
+                    <span>Running Tests...</span>
+                }
+                else
+                {
+                    <span>Run Test Cases</span>
+                }
+            </button>
+        </div>
+
+        <div class="test-cases-container">
+         
+            @if (IsRunningTests)
+            {
+                <div class="loading-indicator">
+                    Running test cases... Please wait.
+                </div>
+            }
+            else
+            {
+            <h3 class="@(AllTestsPassed ? "all-passed" : "some-failed")">
+                @(AllTestsPassed ? "All Test Cases Passed!" : "Wrong Answer :(")
+            </h3>
+            <p>@FailedTestCount/@TestCases.Count test cases failed</p>
+
+            @foreach (var testCase in TestCases)
+            {
+                    <div class="test-case @(testCase.ActualOutput == "Code execution timed out after 5 seconds." ? "timed-out" : (testCase.Passed ? "passed" : "failed"))">
+                        <h4>
+                            <span class="status-icon">
+                                @if (testCase.ActualOutput == "Code execution timed out after 5 seconds.")
+                                {
+                                    <span>⏱</span>
+                                }
+                                else
+                                {
+                                    @(testCase.Passed ? "✓" : "✗")
+                                }
+                            </span>
+                            @testCase.Name
+                        </h4>
+                        <!-- Rest of your test case display code -->
+                    </div>
+                <div class="test-case @(testCase.Passed ? "passed" : "failed")">
+                    <h4>
+                        <span class="status-icon">@(testCase.Passed ? "✓" : "✗")</span>
+                        @testCase.Name
+                    </h4>
+                    <div class="test-details">
+                        <div class="input-output">
+                            <h5>Input (stdin)</h5>
+                            <pre>@testCase.Input</pre>
+                        </div>
+                        <div class="input-output">
+                            <h5>Your Output (stdout)</h5>
+                            <pre>@testCase.ActualOutput</pre>
+                        </div>
+                        <div class="input-output">
+                            <h5>Expected Output</h5>
+                            <pre>@testCase.ExpectedOutput</pre>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            }
+        </div>
+    </div>
 </div>
-
- 
-  
-<StandaloneCodeEditor @ref="_editor" Id="monaco-editor" ConstructionOptions="EditorConstructionOptions"  />
-
-
-<button @onclick="ExecuteCode">Run Code</button>
-
-<h4>Output:</h4>
-<pre>@Output</pre>
 <style>
+    .code-rank-container {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 20px;
+        height: 100vh;
+        padding: 20px;
+    }
 
+    .description-panel {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .code-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+        .input-container input {
+            flex-grow: 1;
+        }
+
+    .editor-container {
+        flex-grow: 1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .output-container {
+        height: 200px;
+        overflow-y: auto;
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    button {
+        align-self: flex-start;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
     .monaco-editor-container {
         height: 500px;
         border: 1px solid gray;
     }
 
+    .button-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .test-cases-container {
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .all-passed {
+        color: #28a745;
+    }
+
+    .some-failed {
+        color: #dc3545;
+    }
+
+    .test-case {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+
+        .test-case h4 {
+            padding: 10px;
+            margin: 0;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+    .status-icon {
+        margin-right: 10px;
+    }
+
+    .test-case.passed h4 {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .test-case.failed h4 {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .test-details {
+        padding: 15px;
+    }
+
+    .input-output {
+        margin-bottom: 15px;
+    }
+
+        .input-output h5 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .input-output pre {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+    .loading-indicator {
+        text-align: center;
+        padding: 20px;
+        font-size: 18px;
+        color: #007bff;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .test-case.timed-out h4 {
+        background-color: #ffeeba;
+        color: #856404;
+    }
 </style>
-@code {
-    private string Code { get; set; } = @"
-using System;
-using System.Linq;
-
-public class Program
-{
-    public static void Main(string args)
-    {
-        Console.WriteLine(args + ""Recived"");
-    }
-}
-";
-    private string Output { get; set; } = "";
-    private string CommandLineArgs { get; set; } = "Hello CodeRank 123";
-    private StandaloneCodeEditor _editor;
-    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
-    {
-        return new StandaloneEditorConstructionOptions
-            {
-                AutomaticLayout = true,
-                Language = "csharp",
-                Value = Code
-            };
-    }
-   
-    private async Task ExecuteCode()
-    {
-        try
-        {
-            var stringWriter = new StringWriter();
-            Console.SetOut(stringWriter);
-
-            var options = ScriptOptions.Default
-                .AddImports("System", "System.Linq")
-                .AddReferences(typeof(Console).Assembly, typeof(Enumerable).Assembly);
-
-            // Wrap the user's code in a class and call Main
-            string wrappedCode = $"{Code} Program.Main(@\"{CommandLineArgs}\");";
-
-            await CSharpScript.EvaluateAsync(wrappedCode, options);
-
-            Output = stringWriter.ToString();
-            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
-        }
-        catch (CompilationErrorException ex)
-        {
-            Output = string.Join("\n", ex.Diagnostics);
-        }
-        catch (Exception ex)
-        {
-            Output = ex.Message;
-        }
-    }
-}
