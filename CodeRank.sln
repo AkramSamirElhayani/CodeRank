@@ -5,17 +5,17 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeRank.Web", "CodeRank.Web\CodeRank.Web.csproj", "{1E5F05A4-F56D-4AFA-A83F-BE963127EA0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeRank.App", "CodeRank.App\CodeRank.App.csproj", "{05F2A8E2-C2E1-46F6-AF27-05FA0FB1C5D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeRank.Domain", "CodeRank.Domain\CodeRank.Domain.csproj", "{38C37F4A-A97C-4B98-B703-CE74A4A891AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeRank.Domain", "CodeRank.Domain\CodeRank.Domain.csproj", "{38C37F4A-A97C-4B98-B703-CE74A4A891AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeRank.Application", "CodeRank.Application\CodeRank.Application.csproj", "{671FB857-5280-49CC-84A1-2DFFA967C10F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeRank.Application", "CodeRank.Application\CodeRank.Application.csproj", "{671FB857-5280-49CC-84A1-2DFFA967C10F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeRank.Infrastructure", "CodeRank.Infrastructure\CodeRank.Infrastructure.csproj", "{A6490B9D-CFF4-4B8C-9D5B-FBA758640A61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeRank.Infrastructure", "CodeRank.Infrastructure\CodeRank.Infrastructure.csproj", "{A6490B9D-CFF4-4B8C-9D5B-FBA758640A61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeRank.Presentation", "CodeRank.Presentation\CodeRank.Presentation.csproj", "{85BBC7E5-E0E4-4E47-B014-5B545C4693D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeRank.Presentation", "CodeRank.Presentation\CodeRank.Presentation.csproj", "{85BBC7E5-E0E4-4E47-B014-5B545C4693D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeRank.API", "CodeRank.API\CodeRank.API.csproj", "{F706B963-8AB3-466E-915D-5B08F3F8A07B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeRank.API", "CodeRank.API\CodeRank.API.csproj", "{F706B963-8AB3-466E-915D-5B08F3F8A07B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeRank.App", "CodeRank.App\CodeRank.App.csproj", "{70535B07-7FC3-47A3-847E-94B47DB25245}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{1E5F05A4-F56D-4AFA-A83F-BE963127EA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E5F05A4-F56D-4AFA-A83F-BE963127EA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E5F05A4-F56D-4AFA-A83F-BE963127EA0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05F2A8E2-C2E1-46F6-AF27-05FA0FB1C5D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05F2A8E2-C2E1-46F6-AF27-05FA0FB1C5D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05F2A8E2-C2E1-46F6-AF27-05FA0FB1C5D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05F2A8E2-C2E1-46F6-AF27-05FA0FB1C5D0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{38C37F4A-A97C-4B98-B703-CE74A4A891AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{38C37F4A-A97C-4B98-B703-CE74A4A891AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38C37F4A-A97C-4B98-B703-CE74A4A891AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{F706B963-8AB3-466E-915D-5B08F3F8A07B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F706B963-8AB3-466E-915D-5B08F3F8A07B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F706B963-8AB3-466E-915D-5B08F3F8A07B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70535B07-7FC3-47A3-847E-94B47DB25245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70535B07-7FC3-47A3-847E-94B47DB25245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70535B07-7FC3-47A3-847E-94B47DB25245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70535B07-7FC3-47A3-847E-94B47DB25245}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,39 @@
+﻿@using CodeRank.App.Services
+@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+@inject TokenService TokenService
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <span>Hello, @context.User.Identity.Name!</span>
+                    <button class="btn btn-link" @onclick="HandleLogout">Logout</button>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="login">Login</a>
+                    <a href="register">Register</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    private async void HandleLogout()
+    {
+        await TokenService.RemoveTokenAsync();
+        await TokenService.RemoveRefreshTokenAsync();
+        ((JwtAuthenticationStateProvider)AuthStateProvider).NotifyUserLogout();
+        NavigationManager.NavigateTo("/");
+    }
+}

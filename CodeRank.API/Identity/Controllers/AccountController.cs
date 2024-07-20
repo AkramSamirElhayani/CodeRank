@@ -11,6 +11,7 @@ using System.Text;
 
 namespace CodeRank.API.Identity.Controllers
 {
+    [Route("Identity")]
     public class AccountController : ControllerBase
     {
 
@@ -91,6 +92,8 @@ namespace CodeRank.API.Identity.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
+            if (user == null)
+                await _userManager.FindByEmailAsync(model.Username);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 return Unauthorized(new AuthResponse { ErrorMessage = "Invalid Authentication" });
