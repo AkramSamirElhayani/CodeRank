@@ -1,6 +1,5 @@
 ﻿namespace CodeRank.App.Identity;
-
-using CodeRank.API.Identity;
+ 
 using System.Net.Http.Json;
 using System.Text.Json;
 
