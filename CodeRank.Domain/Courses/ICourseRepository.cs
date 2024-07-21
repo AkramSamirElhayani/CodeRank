@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeRank.Domain.Courses
+namespace CodeRank.Domain.Courses;
+
+public interface ICourseRepository:IGenericRepository<Course>
 {
-    public interface ICourseRepository:IGenericRepository<Course>
-    {
-    }
+
+    Task<IEnumerable<Course>> GetCoursesByInstructorIdAsync(Guid instructorId, CancellationToken cancellationToken = default);
 }

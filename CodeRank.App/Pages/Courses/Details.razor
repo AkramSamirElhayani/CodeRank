@@ -1,0 +1,47 @@
+﻿@page "/courses/{CourseId:guid}"
+@using CodeRank.App.Models
+@inject CourseService CourseService
+
+<h3>Course Details</h3>
+
+@if (course == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h4>@course.Title</h4>
+    <p>Start Date: @course.StartDate.ToShortDateString()</p>
+    <p>Enrollments: @course.EnrollmentCount</p>
+
+    <h5>Enrolled Students</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Enrollment Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var enrollment in course.Enrollments)
+            {
+                <tr>
+                    <td>@enrollment.StudentName</td>
+                    <td>@enrollment.EnrollmentDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public Guid CourseId { get; set; }
+
+    private CourseDetails? course;
+
+    protected override async Task OnInitializedAsync()
+    {
+        course = await CourseService.GetCourseDetailsAsync(CourseId);
+    }
+}

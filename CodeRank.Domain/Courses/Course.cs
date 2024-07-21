@@ -12,7 +12,6 @@ public class Course : IEntity
 
     public Guid Id { get; private set; }
     public string Title { get; private set; }
-    public Guid TopicId { get; private set; }
     public Guid? InstructorId { get; private set; }
     public DateTime StartDate { get; private set; }
     public IReadOnlyCollection<CourseEnrolment> Enrollments => _enrollments.AsReadOnly();
@@ -22,12 +21,10 @@ public class Course : IEntity
         Guid id,
         string title,
         Guid? instructorId,
-        Guid topicId,
         DateTime startDate)
     {
         Id = id;
         Title = title;
-        TopicId = topicId;
         StartDate = startDate;
         InstructorId = instructorId;
     }
@@ -35,12 +32,11 @@ public class Course : IEntity
     public static Result<Course> Create(
         string title,
         Guid instructorId,
-        Guid topicId,
         DateTime startDate)
     {
         var result = ValidateTitle(title);
         if (result.IsFailure) return Result.Failure<Course>(result.Errors);
-        return Result.Success(new Course(Guid.NewGuid(), title, instructorId, topicId, startDate));
+        return Result.Success(new Course(Guid.NewGuid(), title, instructorId,  startDate));
     }
 
     public Result SetTitle(string title)
@@ -63,7 +59,7 @@ public class Course : IEntity
         InstructorId = null;
         return Result.Success();
     }  
-    internal Result EnrollStudent(CourseEnrolment enrolment)
+    public Result EnrollStudent(CourseEnrolment enrolment)
     {
         _enrollments.Add(enrolment);
         return Result.Success();

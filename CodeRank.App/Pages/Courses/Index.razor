@@ -1,0 +1,58 @@
+﻿@page "/courses"
+@using CodeRank.App.Models
+@inject CourseService CourseService
+@inject NavigationManager NavigationManager
+
+<h3>My Courses</h3>
+
+@if (courses == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Start Date</th>
+                <th>Enrollments</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in courses)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>@course.StartDate.ToShortDateString()</td>
+                    <td>@course.EnrollmentCount</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => ViewCourse(course.Id)">View</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button class="btn btn-success" @onclick="CreateNewCourse">Create New Course</button>
+}
+
+@code {
+    private List<CourseListItem>? courses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        courses = await CourseService.GetCoursesAsync();
+    }
+
+    private void ViewCourse(Guid courseId)
+    {
+        NavigationManager.NavigateTo($"/courses/{courseId}");
+    }
+
+    private void CreateNewCourse()
+    {
+        NavigationManager.NavigateTo("/courses/create");
+    }
+}

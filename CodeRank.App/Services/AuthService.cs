@@ -10,7 +10,7 @@ public class AuthService
 
     public AuthService(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClientFactory.CreateClient("API");
+        _httpClient = httpClientFactory.CreateClient("Identity");
     }
 
     public async Task<AuthResponse> Login(LoginModel loginModel)

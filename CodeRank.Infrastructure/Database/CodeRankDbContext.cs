@@ -16,7 +16,6 @@ public sealed class CodeRankDbContext : DbContext, IUnitOfWork
 {
     internal DbSet<Instructor> Instructors { get; set; }
     internal DbSet<Student> Students { get; set; }
-    internal DbSet<CourseTopic> CourseTopics { get; set; }
     internal DbSet<Course> Courses { get; set; }
     internal DbSet<CourseEnrolment> CourseEnrolments { get; set; }
     internal DbSet<Quiz> Quizzes { get; set; }
@@ -30,15 +29,10 @@ public sealed class CodeRankDbContext : DbContext, IUnitOfWork
 
      
 
-
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .Entity<Course>()
-            .HasOne<CourseTopic>()
-            .WithMany()
-            .HasForeignKey(x=>x.TopicId);
+ 
 
         modelBuilder
             .Entity<Course>()

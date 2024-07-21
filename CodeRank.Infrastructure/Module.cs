@@ -6,7 +6,9 @@ using CodeRank.Infrastructure.Clock;
 using CodeRank.Infrastructure.Courses;
 using CodeRank.Infrastructure.Database;
 using CodeRank.Infrastructure.Instructors;
+using CodeRank.Infrastructure.Services;
 using CodeRank.Infrastructure.Students;
+using CodeRank.Presentation.Courses;
 using CodeRank.Presentation.Instructors;
 using CodeRank.Presentation.Students;
 using FluentValidation;
@@ -30,7 +32,8 @@ public static class Module
     public static void MapEndpoints(IEndpointRouteBuilder app)
     {
         InstructorEndpoint.MapEndpoints(app); 
-        StudentEndpoint.MapEndpoints(app); 
+        StudentEndpoint.MapEndpoints(app);
+        CourseEndpoints.MapEndpoints(app); 
     }
 
     public static IServiceCollection AddModule(
@@ -68,12 +71,12 @@ public static class Module
 
         services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
 
- 
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
         services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IInstructorRepository, InstructorRepository>();
-        services.AddScoped<ICourseTopicRepository, CourseTopicRepository>();
     }
 }

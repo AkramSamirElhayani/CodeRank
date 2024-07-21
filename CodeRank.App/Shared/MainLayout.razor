@@ -1,35 +1,66 @@
-﻿@using CodeRank.App.Services
-@inherits LayoutComponentBase
-@inject AuthenticationStateProvider AuthStateProvider
+﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
 @inject TokenService TokenService
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    <span>Hello, @context.User.Identity.Name!</span>
-                    <button class="btn btn-link" @onclick="HandleLogout">Logout</button>
-                </Authorized>
-                <NotAuthorized>
-                    <a href="login">Login</a>
-                    <a href="register">Register</a>
-                </NotAuthorized>
-            </AuthorizeView>
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="@NavMenuCssClass">
+        <div class="sidebar-header">
+            <h3>CodeRank</h3>
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <NavMenu />
+    </nav>
 
+    <!-- Page Content -->
+    <div id="content">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-link text-light" @onclick="ToggleNavMenu">
+                    <div class="hamburger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+
+                <div class="ms-auto">
+                    <AuthorizeView>
+                        <Authorized>
+                            <span class="me-3 text-light">Hello, @context.User.Identity.Name!</span>
+                            <button class="btn btn-outline-light" @onclick="HandleLogout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </Authorized>
+                        <NotAuthorized>
+                            <a href="login" class="btn btn-outline-light me-2">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                            <a href="register" class="btn btn-light">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid mt-3">
+            @Body
+        </div>
+    </div>
+</div>
 @code {
-    private async void HandleLogout()
+    private bool collapseNavMenu = false;
+    private string? NavMenuCssClass => collapseNavMenu ? "active" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task HandleLogout()
     {
         await TokenService.RemoveTokenAsync();
         await TokenService.RemoveRefreshTokenAsync();

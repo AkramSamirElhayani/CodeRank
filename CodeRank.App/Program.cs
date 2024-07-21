@@ -1,4 +1,4 @@
-using CodeRank.App.Data;
+using CodeRank.App.Handlers.Models;
 using CodeRank.App.Identity;
 using CodeRank.App.Services;
 using Microsoft.AspNetCore.Components;
@@ -11,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
@@ -20,14 +19,22 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<TokenService2>();
-
+builder.Services.AddScoped<CourseService>();
+builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+builder.Services.AddTransient<IdentityDelegatingHandler>();
 
 builder.Services.AddHttpClient("API", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5239");
-});
+}).AddHttpMessageHandler<AuthenticationDelegatingHandler>();
 
+builder.Services.AddHttpClient("Identity", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5239");
+}).AddHttpMessageHandler<IdentityDelegatingHandler>();
+
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("API"));
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Identity"));
 
 

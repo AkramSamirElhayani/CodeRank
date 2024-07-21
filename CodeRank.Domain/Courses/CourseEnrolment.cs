@@ -17,7 +17,7 @@ public class CourseEnrolment:IEntity
         EnrolmentDate = enrolmentDate;
     }
 
-    internal static Result<CourseEnrolment> Create(Guid studentId, Guid courseId, DateTime enrolmentDate)
+    public static Result<CourseEnrolment> Create(Guid studentId, Guid courseId, DateTime enrolmentDate)
     {
         return Result.Success(new CourseEnrolment(studentId, courseId, enrolmentDate));
     }

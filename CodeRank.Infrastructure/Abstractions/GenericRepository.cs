@@ -13,7 +13,7 @@ namespace CodeRank.Infrastructure.Abstractions;
 public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity>
       where TEntity : class, IEntity 
 {
-    private readonly CodeRankDbContext _db;
+    internal readonly CodeRankDbContext _db;
 
     public GenericRepository(CodeRankDbContext db)
     {

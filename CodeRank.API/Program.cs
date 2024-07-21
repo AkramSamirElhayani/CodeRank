@@ -1,8 +1,10 @@
 using CodeRank.Api.Extensions;
 using CodeRank.API.Identity;
 using CodeRank.API.Identity.TokenHelpers;
+using CodeRank.Application.Abstractions;
 using CodeRank.Infrastructure;
 using CodeRank.Infrastructure.Database;
+using CodeRank.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +42,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
- 
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
@@ -50,10 +52,15 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-//builder.Services.AddAutoMapper(config =>
-//{
-//    config.AddProfile(new MappingProfile());
-//});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("InstructorPolicy", policy =>
+        policy.RequireRole("Instructor"));
+    options.AddPolicy("InstructorPolicy", policy =>
+       policy.RequireRole("Instructor"));
+});
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
